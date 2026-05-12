@@ -1,28 +1,40 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../features/auth/authSlice";
+import DashboardLayout from "../layouts/DashboardLayout";
+import SummaryCard from "../components/dashboard/SummaryCard";
+
+/*
+  Main Dashboard Page
+*/
 
 const DashboardPage = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-  };
-
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+    <DashboardLayout>
 
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 text-white px-4 py-2 rounded-xl"
-      >
-        Logout
-      </button>
-    </div>
+      {/* Summary Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+        <SummaryCard
+          title="Total Balance"
+          amount="$12,450"
+        />
+
+        <SummaryCard
+          title="Income"
+          amount="$8,200"
+        />
+
+        <SummaryCard
+          title="Expenses"
+          amount="$3,120"
+        />
+
+        <SummaryCard
+          title="Savings"
+          amount="$5,080"
+        />
+
+      </div>
+
+    </DashboardLayout>
   );
 };
 
