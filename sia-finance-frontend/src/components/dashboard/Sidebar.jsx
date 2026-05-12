@@ -5,18 +5,24 @@ import {
   Settings,
 } from "lucide-react";
 
-/*
-  Sidebar Component
+import { NavLink } from "react-router-dom";
 
-  This handles the left navigation panel
-  of the dashboard.
+/*
+  Sidebar Navigation
+
+  NavLink automatically gives us
+  active route styling.
 */
 
 const Sidebar = () => {
-  return (
-    <aside className="w-64 bg-black text-white min-h-screen p-6">
+  // Shared styling for all menu links
+  const baseClasses =
+    "flex items-center gap-3 w-full p-3 rounded-xl transition";
 
-      {/* Logo / App Name */}
+  return (
+    <aside className="w-64 bg-black text-white min-h-screen p-6 hidden md:block">
+
+      {/* Logo */}
       <div className="mb-10">
         <h1 className="text-2xl font-bold">
           SIA Finance
@@ -27,28 +33,68 @@ const Sidebar = () => {
         </p>
       </div>
 
-      {/* Navigation Links */}
+      {/* Navigation */}
       <nav className="space-y-3">
 
-        <button className="flex items-center gap-3 w-full p-3 rounded-xl bg-white/10 hover:bg-white/20 transition">
+        {/* Dashboard */}
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            `${baseClasses} ${
+              isActive
+                ? "bg-white/20"
+                : "hover:bg-white/10"
+            }`
+          }
+        >
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
-        </button>
+        </NavLink>
 
-        <button className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/10 transition">
+        {/* Transactions */}
+        <NavLink
+          to="/transactions"
+          className={({ isActive }) =>
+            `${baseClasses} ${
+              isActive
+                ? "bg-white/20"
+                : "hover:bg-white/10"
+            }`
+          }
+        >
           <Receipt size={20} />
           <span>Transactions</span>
-        </button>
+        </NavLink>
 
-        <button className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/10 transition">
+        {/* Analytics */}
+        <NavLink
+          to="/analytics"
+          className={({ isActive }) =>
+            `${baseClasses} ${
+              isActive
+                ? "bg-white/20"
+                : "hover:bg-white/10"
+            }`
+          }
+        >
           <BarChart3 size={20} />
           <span>Analytics</span>
-        </button>
+        </NavLink>
 
-        <button className="flex items-center gap-3 w-full p-3 rounded-xl hover:bg-white/10 transition">
+        {/* Settings */}
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `${baseClasses} ${
+              isActive
+                ? "bg-white/20"
+                : "hover:bg-white/10"
+            }`
+          }
+        >
           <Settings size={20} />
           <span>Settings</span>
-        </button>
+        </NavLink>
 
       </nav>
     </aside>
