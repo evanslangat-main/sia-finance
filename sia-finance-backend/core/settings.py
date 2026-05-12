@@ -143,6 +143,6 @@ SIMPLE_JWT = {
 }
 
 # allowed headers for CORS
-COWS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
 ]
