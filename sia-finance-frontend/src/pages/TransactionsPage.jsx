@@ -1,15 +1,51 @@
+import { useEffect, useState } from "react";
+
 import DashboardLayout from "../layouts/DashboardLayout";
+import api from "../services/api";
 
 /*
   Transactions Page
 */
 
 const TransactionsPage = () => {
+
+  // Store transactions from API
+  const [transactions, setTransactions] =
+    useState([]);
+
+  /*
+    Fetch transactions
+  */
+  const fetchTransactions = async () => {
+
+    try {
+
+      const response = await api.get(
+        "transactions/"
+      );
+
+      setTransactions(response.data);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+  };
+
+  /*
+    Run once on page load
+  */
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
   return (
     <DashboardLayout>
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border">
 
+        {/* Page Header */}
         <div className="flex items-center justify-between mb-6">
 
           <div>
@@ -28,7 +64,7 @@ const TransactionsPage = () => {
 
         </div>
 
-        {/* Placeholder Table */}
+        {/* Transactions Table */}
         <div className="overflow-x-auto">
 
           <table className="w-full">
@@ -36,29 +72,63 @@ const TransactionsPage = () => {
             <thead>
               <tr className="border-b text-left">
 
-                <th className="pb-3">Title</th>
-                <th className="pb-3">Category</th>
-                <th className="pb-3">Amount</th>
-                <th className="pb-3">Date</th>
+                <th className="pb-3">
+                  ID
+                </th>
+
+                <th className="pb-3">
+                  Category
+                </th>
+
+                <th className="pb-3">
+                  Amount
+                </th>
+
+                <th className="pb-3">
+                  Type
+                </th>
+
+                <th className="pb-3">
+                  Date
+                </th>
 
               </tr>
             </thead>
 
             <tbody>
 
-              <tr className="border-b">
-                <td className="py-4">Netflix</td>
-                <td>Entertainment</td>
-                <td>$15</td>
-                <td>12 May 2026</td>
-              </tr>
+              {transactions.map((transaction) => (
 
-              <tr className="border-b">
-                <td className="py-4">Salary</td>
-                <td>Income</td>
-                <td>$2,000</td>
-                <td>10 May 2026</td>
-              </tr>
+                <tr
+                  key={transaction.id}
+                  className="border-b"
+                >
+
+                  <td className="py-4">
+                    {transaction.id}
+                  </td>
+
+                  <td>
+                    {transaction.category_name
+
+                    }
+                  </td>
+
+                  <td>
+                    ${transaction.amount}
+                  </td>
+
+                  <td>
+                    {transaction.type}
+                  </td>
+
+                  <td>
+                    {transaction.date}
+                  </td>
+
+                </tr>
+
+              ))}
 
             </tbody>
 

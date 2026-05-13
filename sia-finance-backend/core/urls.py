@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from core.views import health_check
 
 from rest_framework_simplejwt.views import (
@@ -32,4 +32,8 @@ urlpatterns = [
 
     # Health check endpoint
     path('api/health/', health_check, name='health_check'),
+
+    #finance ednpoints
+    path('api/', include('finances.urls')),
+    
 ]
