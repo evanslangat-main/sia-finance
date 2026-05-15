@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.db.models import Sum
+from .services.finance_api import ( get_crypto_prices, get_exchange_rates)
 
 
 from .models import (Category, Transaction)
@@ -79,3 +80,25 @@ class CategoryAnalyticsView(generics.GenericAPIView):
         category_expenses = Transaction.objects.filter(user=user, type='expense').values('category__name').annotate(total=Sum('amount')).order_by('-total')
 
         return Response(category_expenses)
+    
+class MarketDataView(
+    generics.GenericAPIView
+):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        crypto = get_crypto_prices()
+
+        exchange_rates = (
+            get_exchange_rates()
+        )
+
+        return Response({
+
+            "crypto": crypto,
+
+            "exchange_rates":
+                exchange_rates,
+        })

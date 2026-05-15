@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
  * Sidebar Navigation Component
  * Main navigation with modern design and logout functionality
  */
-const Sidebar = () => {
+const Sidebar = ({ onClose, isMobile = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -33,7 +33,17 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-gradient-to-b from-gray-900 via-slate-900 to-gray-900 text-white min-h-screen p-6 hidden md:flex flex-col sticky top-0">
+    <aside className={`w-64 bg-gradient-to-b from-gray-900 via-slate-900 to-gray-900 text-white min-h-screen p-6 ${isMobile ? 'flex fixed top-0 left-0 z-50' : 'hidden md:flex flex-col sticky top-0'}`}>
+      {/* Mobile Close Button */}
+      {isMobile && (
+        <button
+          className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold focus:outline-none"
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          &times;
+        </button>
+      )}
       {/* Logo */}
       <div className="mb-10 flex items-center gap-3">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-2 rounded-lg">

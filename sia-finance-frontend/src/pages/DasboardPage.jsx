@@ -6,6 +6,7 @@ import ExpensePieChart from "../components/dashboard/charts/ExpensePieChart";
 import FinanceBarChart from "../components/dashboard/charts/FinanceBarChart";
 import toast from "react-hot-toast";
 import api from "../services/api";
+import MarketWidgets from "../components/dashboard/MarketWidgets";
 
 /**
  * Dashboard Page Component
@@ -23,6 +24,12 @@ const DashboardPage = () => {
 
   // Category analytics for pie chart
   const [categoryAnalytics, setCategoryAnalytics] = useState([]);
+
+  // Market data state
+  const [marketData, setMarketData] = useState({
+    crypto: {},
+    exchange_rates: {},
+  });
 
   // Loading state
   const [loading, setLoading] = useState(true);
@@ -53,12 +60,31 @@ const DashboardPage = () => {
   };
 
   /**
+   * Fetch market data for widgets
+   */
+  const fetchMarketData = async () => {
+
+  try {
+
+    const response = await api.get("dashboard/market-data/");    
+    console.log(response.data)
+    setMarketData(response.data);
+
+  } catch (error) {
+
+    console.log(error.response);
+    toast.error("Failed to fetch market data");
+
+  }
+};
+
+  /**
    * Initialize dashboard on component mount
    */
   useEffect(() => {
     const initDashboard = async () => {
       setLoading(true);
-      await Promise.all([fetchAnalytics(), fetchCategoryAnalytics()]);
+      await Promise.all([fetchAnalytics(), fetchCategoryAnalytics(), fetchMarketData()]);
       setLoading(false);
     };
     initDashboard();
@@ -85,7 +111,9 @@ const DashboardPage = () => {
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's your financial overview.</p>
+        <p className="text-gray-600">
+          Welcome back! Here's your financial overview.
+        </p>
       </div>
 
       {/* Analytics Summary Cards */}
@@ -112,7 +140,7 @@ const DashboardPage = () => {
         <FinanceBarChart analytics={analytics} />
         <ExpensePieChart data={categoryAnalytics} />
       </div>
-
+      <MarketWidgets marketData={marketData} />
       {/* Recent Transactions Section */}
       <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="mb-6">

@@ -11,7 +11,7 @@ const FinanceBarChart = ({ analytics }) => {
     }];
 
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border ">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-400">
             <div className="mb-6">
                 <h2 className="text-2xl font-bold">
                     Income vs Expenses

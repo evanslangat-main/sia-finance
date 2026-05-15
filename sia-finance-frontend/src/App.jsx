@@ -12,9 +12,15 @@ function App() {
   return (
     <Routes>
 
-      {/* Login */}
+
+       {/* Login */}
       <Route
         path="/"
+        element={<LoginPage />}
+      />
+      {/* Login */}
+      <Route
+        path="/login"
         element={<LoginPage />}
       />
 
