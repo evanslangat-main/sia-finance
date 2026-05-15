@@ -1,5 +1,8 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.db.models import Sum
+
 
 from .models import (Category, Transaction)
 
@@ -40,3 +43,28 @@ class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Transaction.objects.filter(user=self.request.user)
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
+
+class DashaboardAnalyticsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+
+        #tota incomee
+        total_income = Transaction.objects.filter(user=user, type='income').aggregate(total=Sum('amount'))['total'] or 0
+
+        #total expense
+        total_expense = Transaction.objects.filter(user=user, type='expense').aggregate(total=Sum('amount'))['total'] or 0
+
+        #net balance
+        net_balance = total_income - total_expense
+
+        #recent transactions
+        recent_transactions = Transaction.objects.filter(user=user).order_by('-date')[:5]
+        recent_transactions_serializer = TransactionSerializer(recent_transactions, many=True).data
+
+        return Response ({
+            "total_income" : total_income,
+            "total_expenses" : total_expense,
+            "net_balance" : net_balance,
+            "recent_transactions" : recent_transactions_serializer
+        })

@@ -1,36 +1,161 @@
+import { useEffect, useState } from "react";
+
 import DashboardLayout from "../layouts/DashboardLayout";
 import SummaryCard from "../components/dashboard/SummaryCard";
+import toast from "react-hot-toast";
+
+import api from "../services/api";
 
 /*
-  Main Dashboard Page
+  Dashboard Page
 */
 
 const DashboardPage = () => {
+
+  // Dashboard analytics
+  const [analytics, setAnalytics] =
+    useState({
+
+      total_income: 0,
+      total_expenses: 0,
+      total_balance: 0,
+
+      recent_transactions: [],
+    });
+
+  /*
+    Fetch analytics
+  */
+  const fetchAnalytics = async () => {
+
+    try {
+        
+      const response = await api.get(
+        "dashboard/analytics/"
+      );
+
+      setAnalytics(response.data);
+      console.log(response.data)
+
+    } catch (error) {
+
+      toast.error("Failed to fetch analytics");
+
+    }
+  };
+
+  /*
+    Run on page load
+  */
+  useEffect(() => {
+    fetchAnalytics();
+  }, []);
+
   return (
+
     <DashboardLayout>
 
-      {/* Summary Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      {/* Analytics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
 
         <SummaryCard
           title="Total Balance"
-          amount="$12,450"
+          amount={analytics.net_balance}
         />
 
         <SummaryCard
           title="Income"
-          amount="$8,200"
+          amount={analytics.total_income}
         />
 
         <SummaryCard
           title="Expenses"
-          amount="$3,120"
+          amount={analytics.total_expenses}
         />
 
-        <SummaryCard
-          title="Savings"
-          amount="$5,080"
-        />
+      </div>
+
+      {/* Recent Transactions */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border">
+
+        <div className="mb-6">
+
+          <h2 className="text-2xl font-bold">
+            Recent Transactions
+          </h2>
+
+          <p className="text-gray-500 text-sm">
+            Latest financial activity
+          </p>
+
+        </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+
+          <table className="w-full">
+
+            <thead>
+              <tr className="border-b text-left">
+
+                <th className="pb-3">
+                  Title
+                </th>
+
+                
+
+                <th className="pb-3">
+                  Amount
+                </th>
+
+                <th className="pb-3">
+                  Type
+                </th>
+
+                <th className="pb-3">
+                  Date
+                </th>
+
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {analytics.recent_transactions.map(
+                (transaction) => (
+
+                <tr
+                  key={transaction.id}
+                  className="border-b"
+                >
+
+                  <td className="py-4">
+                    {transaction.description}
+                  </td>
+
+                  
+
+                  <td>
+                    ${transaction.amount}
+                  </td>
+
+                  <td>
+                    {transaction.type}
+                  </td>
+
+                  <td>
+                    {transaction.date}
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
 
       </div>
 
@@ -39,3 +164,4 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+

@@ -1,13 +1,14 @@
 /*
-  Reusable Summary Card
-
-  Props:
-  - title
-  - amount
+  Reusable Analytics Card
 */
 
-const SummaryCard = ({ title, amount }) => {
+const SummaryCard = ({
+  title,
+  amount,
+}) => {
+
   return (
+
     <div className="bg-white rounded-2xl p-6 shadow-sm border">
 
       {/* Card Title */}
@@ -15,9 +16,9 @@ const SummaryCard = ({ title, amount }) => {
         {title}
       </p>
 
-      {/* Main Value */}
+      {/* Amount */}
       <h3 className="text-3xl font-bold">
-        {amount}
+        ${Number(amount).toLocaleString()}
       </h3>
 
     </div>

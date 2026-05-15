@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import api from "../services/api";
 import { loginSuccess } from "../features/auth/authSlice";
@@ -32,10 +33,10 @@ const LoginPage = () => {
       const response = await api.post("token/", formData);
 
       dispatch(loginSuccess(response.data));
-
+     toast.success("Logged in successfully");
       navigate("/dashboard");
     } catch (err) {
-      setError("Invalid username or password");
+      toast.error("Invalid username or password");
       console.error(err);
     }
   };
