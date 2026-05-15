@@ -68,3 +68,14 @@ class DashaboardAnalyticsView(generics.GenericAPIView):
             "net_balance" : net_balance,
             "recent_transactions" : recent_transactions_serializer
         })
+
+class CategoryAnalyticsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        #aggregate expenses by category
+        category_expenses = Transaction.objects.filter(user=user, type='expense').values('category__name').annotate(total=Sum('amount')).order_by('-total')
+
+        return Response(category_expenses)

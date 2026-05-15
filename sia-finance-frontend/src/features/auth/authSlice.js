@@ -13,12 +13,17 @@ const authSlice = createSlice({
     reducers: {
         loginSuccess: (state, action) => {
             state.user = action.payload.user;
-            state.accessToken = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
+            state.accessToken = action.payload.access;
+            state.refreshToken = action.payload.refresh;
             state.isAuthenticated = true;
 
-            localStorage.setItem("accessToken", action.payload.access)
+            // Save to localStorage
+            localStorage.setItem("accessToken", action.payload.access);
             localStorage.setItem("refreshToken", action.payload.refresh);
+            // Save username for display in header
+            if (action.payload.user) {
+                localStorage.setItem("username", action.payload.user.username || "User");
+            }
         },
         logout: (state) => {
             state.user = null;
@@ -26,8 +31,10 @@ const authSlice = createSlice({
             state.refreshToken = null;
             state.isAuthenticated = false;
 
+            // Clear localStorage
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
+            localStorage.removeItem("username");
         },
     },
 });
